@@ -5,7 +5,7 @@ const hue = require('hue-api');
 
 const port = process.env.PORT || 3000;
 const clientId = process.env.HUE_CLIENT_ID;
-const clientSecret = process.env_HUE_CLIENT_SECRET;
+const clientSecret = process.env.HUE_CLIENT_SECRET;
 const frontendUrl = process.env.FRONTEND_URL;
 
 app.get('/', (req, res) => {
