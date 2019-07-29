@@ -9,7 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.0.0",
     "express": "^4.17.1",
-    "hue-api": "git+https://github.com/micopiira/hue-remote-api.git"
+    "hue-api": "git+https://github.com/micopiira/hue-remote-api.git",
+    "node-fetch": "^2.6.0"
   }
 }
