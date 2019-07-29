@@ -14,7 +14,10 @@ app.get('/', (req, res) => {
 
 app.get('/callback', (req, res) => {
 	hue.oauth2.getToken(clientId, clientSecret, req.query.code)
-		.then(json => res.redirect(frontendUrl + '?access_token=' + json.access_token));
+		.then(json => {
+			console.log(json);
+			res.redirect(frontendUrl + '?access_token=' + json.access_token);
+		});
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
