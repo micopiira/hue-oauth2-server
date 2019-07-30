@@ -16,8 +16,7 @@ app.get('/', (req, res) => {
 	res.redirect(hue.oauth2.getOauthLink(clientId));
 });
 
-app.get('/v2/:path', (req, res) => {
-	console.log({path: req.params.path, accessToken: req.header('Authorization').split(' ')[1]});
+app.get('/v2/:path(*)', (req, res) => {
 	res.header('Access-Control-Allow-Origin', '*');
 	hue.getJson(req.header('Authorization').split(' ')[1], '/v2/' + req.params.path).then(json => res.json(json));
 });
@@ -25,7 +24,6 @@ app.get('/v2/:path', (req, res) => {
 app.get('/callback', (req, res) => {
 	hue.oauth2.getToken(clientId, clientSecret, req.query.code)
 		.then(json => {
-			console.log(json);
 			res.redirect(frontendUrl + '?access_token=' + json.access_token);
 		});
 });
