@@ -10,15 +10,29 @@ const clientId = process.env.HUE_CLIENT_ID;
 const clientSecret = process.env.HUE_CLIENT_SECRET;
 const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000/';
 
+app.use(express.json());
 app.use(cors());
 
 app.get('/', (req, res) => {
 	res.redirect(hue.oauth2.getOauthLink(clientId));
 });
 
-app.get('/v2/:path(*)', (req, res) => {
+/**
+ * Proxy requests to real Hue API
+ */
+app.all('/v2/:path(*)', (req, res, next) => {
 	res.header('Access-Control-Allow-Origin', '*');
-	hue.getJson(req.header('Authorization').split(' ')[1], '/v2/' + req.params.path).then(json => res.json(json));
+	const opts = {
+		method: req.method,
+		headers: {
+			'Authorization': req.header('Authorization'),
+			'Content-Type': 'application/json'
+		}
+	};
+	if (req.method != 'GET') {
+		opts.body = JSON.stringify(req.body);
+	}
+	hue.call('/v2/' + req.params.path, opts).then(json => res.json(json)).catch(next);
 });
 
 app.get('/callback', (req, res) => {
